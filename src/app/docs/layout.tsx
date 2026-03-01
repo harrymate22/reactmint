@@ -50,10 +50,11 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
       <div className="flex-1 w-full max-w-[1600px] mx-auto px-4 md:px-6 lg:px-8 md:grid md:grid-cols-[220px_minmax(0,1fr)] lg:grid-cols-[240px_minmax(0,1fr)_260px] xl:grid-cols-[260px_minmax(0,1fr)_280px] md:gap-6 lg:gap-10">
         
         {/* Left Sidebar (Navigation) */}
-        <aside className="fixed top-16 z-30 -ml-2 hidden h-[calc(100vh-4rem)] w-full shrink-0 md:sticky md:block overflow-y-auto py-8 pr-6 border-r border-foreground/5 scrollbar-thin scrollbar-thumb-foreground/10">
-          
-          {/* Get Started */}
-          <div className="mb-8">
+        <div className="fixed top-16 z-30 -ml-2 hidden h-[calc(100vh-4rem)] w-full shrink-0 md:sticky md:block">
+          <aside className="h-full w-full overflow-y-auto py-8 pr-6 border-r border-foreground/5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-foreground/10 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-foreground/20">
+            
+            {/* Get Started */}
+            <div className="mb-8">
             <h4 className="mb-3 px-2 text-sm font-medium text-foreground">Get Started</h4>
             <div className="grid grid-flow-row auto-rows-max text-sm space-y-1 border-l border-foreground/10 ml-2">
               <Link href="/docs" className="flex w-full items-center border-l-2 border-transparent px-3 py-1.5 text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors -ml-[1px]">Introduction</Link>
@@ -99,9 +100,10 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
 
-          {/* Bottom Fade Mask */}
-          <div className="sticky bottom-0 left-0 w-full h-24 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none -mb-8"></div>
         </aside>
+          {/* Bottom Fade Mask */}
+          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background via-background/90 to-transparent pointer-events-none pr-6 z-10 transition-opacity"></div>
+        </div>
 
         {/* Center Main Content */}
         <main className="relative py-8 lg:py-10 min-w-0">

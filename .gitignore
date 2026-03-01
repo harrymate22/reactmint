@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# reactmint private/advanced features
+/src/components/pro/
+/src/content/premium/
+/src/app/dashboard/
+/.ai/
+/scripts/ai/
+/data/db/
+/advanced-templates/
