@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 
 export default function DocsLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col min-h-screen font-sans selection:bg-primary/30 bg-background text-foreground bg-[url('https://reactbits.dev/noise.png')] bg-fixed mix-blend-normal dark:mix-blend-lighten [background-size:200px]">
+    <div className="flex flex-col min-h-screen font-sans selection:bg-primary/30 bg-background text-foreground bg-fixed mix-blend-normal dark:mix-blend-lighten [background-size:200px]">
       
       {/* Docs Header Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-foreground/10 bg-background/80 backdrop-blur-xl">

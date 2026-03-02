@@ -13,6 +13,8 @@ import {
 } from "@codesandbox/sandpack-react";
 import Image from "next/image";
 import { CodeHighlighter } from "@/components/docs/CodeHighlighter";
+import { generateInstallCommand } from "@/install-engine/generateCommand";
+import type { InstallMode, VariantKey, PackageManager } from "@/types";
 
 export default function ComponentPage({
   params,
@@ -22,9 +24,9 @@ export default function ComponentPage({
   const { slug } = use(params);
   const { theme } = useTheme();
   const component = getComponentBySlug(slug);
-  const [installTab, setInstallTab] = useState<"cli" | "manual">("cli");
+  const [installTab, setInstallTab] = useState<InstallMode>("cli");
   const [framework, setFramework] = useState<"next" | "vite" | "remix">("next");
-  const [packageManager, setPackageManager] = useState<"pnpm" | "npm" | "yarn" | "bun">("pnpm");
+  const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
   const [copied, setCopied] = useState("");
   const [codeLang, setCodeLang] = useState<"ts" | "js">("ts");
   const [codeStyle, setCodeStyle] = useState<"tailwind" | "css">("tailwind");
@@ -98,6 +100,10 @@ export default function ComponentPage({
             <TabsTrigger value="preview" className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-foreground/10 data-[state=active]:text-foreground text-muted-foreground flex items-center gap-2 whitespace-nowrap">
                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                Preview
+            </TabsTrigger>
+            <TabsTrigger value="code" className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-foreground/10 data-[state=active]:text-foreground text-muted-foreground flex items-center gap-2 whitespace-nowrap group">
+               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+               Code
             </TabsTrigger>
             <TabsTrigger value="playground" className="rounded-full px-4 py-1.5 text-xs font-semibold data-[state=active]:bg-foreground/10 data-[state=active]:text-foreground text-muted-foreground flex items-center gap-2 whitespace-nowrap group">
                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-data-[state=active]:text-blue-500"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -243,13 +249,13 @@ export default function App() {
              </SandpackProvider>
           </div>
         </TabsContent>
-      </Tabs>
 
-      {/* Smart Install System */}
-      <section className="pt-8 border-t border-foreground/5">
-           <h2 className="text-2xl font-bold tracking-tight text-foreground mb-6">Smart Install</h2>
-           
-           <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
+        <TabsContent value="code" className="mt-0">
+           {/* Smart Install System */}
+           <section className="mb-12">
+             <h2 className="text-2xl font-bold tracking-tight text-foreground mb-6">Smart Install</h2>
+             
+             <div className="flex items-center justify-between flex-wrap gap-4 mb-4">
               <div className="flex bg-background border border-foreground/10 rounded-full p-1 h-auto">
                  <button 
                    onClick={() => setInstallTab("cli")}
@@ -305,21 +311,34 @@ export default function App() {
               <div className="relative group">
                 {(() => {
                   let installString = "";
-                  if (installTab === "cli") {
-                    // Adapt the npx command based on package manager
-                    let runner = "npx";
-                    if (packageManager === "pnpm") runner = "pnpm dlx";
-                    if (packageManager === "yarn") runner = "yarn dlx";
-                    if (packageManager === "bun") runner = "bunx";
-                    
-                    const baseShadcn = component.install.shadcn || `npx reactmint add ${component.slug}`;
-                    installString = baseShadcn.replace("npx", runner) + (framework !== "next" ? ` --${framework}` : "");
+                  
+                  // Temporary fallback for older components that haven't migrated to the new variants structure yet
+                  if (!component.variants && component.install) {
+                    if (installTab === "cli") {
+                      let runner = "npx";
+                      if (packageManager === "pnpm") runner = "pnpm dlx";
+                      if (packageManager === "yarn") runner = "yarn dlx";
+                      if (packageManager === "bun") runner = "bunx";
+                      
+                      const baseShadcn = component.install?.shadcn || `npx reactmint add ${component.slug}`;
+                      installString = baseShadcn.replace("npx", runner) + (framework !== "next" ? ` --${framework}` : "");
+                    } else {
+                      let installer = "npm install";
+                      if (packageManager === "pnpm") installer = "pnpm add";
+                      if (packageManager === "yarn") installer = "yarn add";
+                      if (packageManager === "bun") installer = "bun install";
+                      installString = `${installer} ${component.install?.npm?.split('install ')[1] || `@reactmint/${component.slug}`}`;
+                    }
                   } else {
-                    let installer = "npm install";
-                    if (packageManager === "pnpm") installer = "pnpm add";
-                    if (packageManager === "yarn") installer = "yarn add";
-                    if (packageManager === "bun") installer = "bun install";
-                    installString = `${installer} ${component.install.npm?.split('install ')[1] || `@reactmint/${component.slug}`}`;
+                    // New Scalable Install System
+                    const variantKey: VariantKey = `${codeLang}-${codeStyle}` as VariantKey;
+                    installString = generateInstallCommand(
+                      component.slug,
+                      variantKey,
+                      packageManager,
+                      installTab,
+                      component.intelligence?.registryDependencies
+                    );
                   }
 
                   return (
@@ -410,38 +429,14 @@ export default function App() {
             })()}
 
             {/* Code Content */}
-            <div className={`relative ${!isCodeExpanded ? "max-h-[400px] overflow-hidden" : ""}`}>
+            <div className="relative">
               <div className="p-4 sm:p-6 text-zinc-300 overflow-x-auto text-[13px] font-mono leading-relaxed scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                 <CodeHighlighter 
                   code={codeLang === "ts" ? component.usage.ts : component.usage.js} 
                   lang={codeLang} 
                 />
               </div>
-
-              {/* Expansion Gradient Overlay */}
-              {!isCodeExpanded && (
-                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/80 to-transparent flex items-end justify-center pb-6">
-                  <button
-                    onClick={() => setIsCodeExpanded(true)}
-                    className="backdrop-blur-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] z-10"
-                  >
-                    Expand Snippet
-                  </button>
-                </div>
-              )}
             </div>
-
-            {/* Collapse Button */}
-            {isCodeExpanded && (
-              <div className="flex justify-center p-4 border-t border-white/5 bg-white/[0.02]">
-                <button
-                  onClick={() => setIsCodeExpanded(false)}
-                  className="bg-white/5 hover:bg-white/10 border border-white/10 text-white/80 hover:text-white px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-colors"
-                >
-                  Collapse Snippet
-                </button>
-              </div>
-            )}
           </div>
         </section>
       )}
@@ -651,10 +646,11 @@ export default function App() {
               </div>
 
             </div>
-         </div>
-      </section>
-
+          </div>
+        </section>
+      </TabsContent>
       
-    </div>
+    </Tabs>
+  </div>
   );
 }

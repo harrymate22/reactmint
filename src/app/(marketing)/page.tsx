@@ -8,11 +8,8 @@ export default function MarketingPage() {
   return (
     <div className="flex flex-col min-h-screen font-sans selection:bg-primary/30 bg-background text-foreground relative overflow-hidden">
       
-      {/* Rule Book Grid & Noise Base */}
+
       <div className="absolute inset-0 pointer-events-none z-0">
-         {/* Subtle Noise Texture */}
-         <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03] bg-[url('https://reactbits.dev/noise.png')] mix-blend-overlay"></div>
-         {/* Rule Book Grid Pattern */}
          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_0%,#000_70%,transparent_100%)]"></div>
       </div>
 
@@ -162,7 +159,7 @@ export default function MarketingPage() {
           <div className="w-full bg-gradient-to-br from-primary via-[#e03902] to-secondary rounded-[3rem] p-12 md:p-20 flex flex-col items-center text-center shadow-2xl border border-white/20 relative overflow-hidden">
              
              {/* Micro-texture over gradient */}
-             <div className="absolute inset-0 opacity-[0.03] bg-[url('https://reactbits.dev/noise.png')] mix-blend-overlay"></div>
+            {/* Noise overlay removed */}
              
              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4 relative z-10">
                Start Exploring
