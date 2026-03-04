@@ -83,3 +83,55 @@
     @apply bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground;
   }
 }
+
+/* Liquid Glass Effect (Variables & Base) */
+.glass-effect {
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateZ(0);
+
+  /* Light mode defaults */
+  --lg-highlight: rgba(255, 255, 255, 0.8);
+  --lg-bg-color: rgba(255, 255, 255, 0.4);
+}
+
+.dark .glass-effect {
+  /* Dark mode defaults */
+  --lg-highlight: rgba(255, 255, 255, 0.15);
+  --lg-bg-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Layer 1: Background + Blur */
+.glass-effect::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--lg-bg-color);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: background 0.3s ease;
+  border-radius: inherit;
+}
+
+/* Layer 2: Specular Highlights */
+.glass-effect::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow:
+    inset 1px 1px 0 var(--lg-highlight),
+    inset 0 0 5px var(--lg-highlight);
+  pointer-events: none;
+}
+
+/* Ensure all direct children sit above the glass layers */
+.glass-effect > * {
+  position: relative;
+  z-index: 3;
+}

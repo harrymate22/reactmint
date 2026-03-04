@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "ReactMint",
+  name: "Mintuix",
   description: "A production-level Next.js component library with beautiful animations.",
-  url: "https://reactmint.com",
+  url: "https://mintuix.com",
 };

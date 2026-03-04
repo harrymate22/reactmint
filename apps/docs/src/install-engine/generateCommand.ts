@@ -25,19 +25,19 @@ export function generateInstallCommand(
   }
 
   if (mode === "cli") {
-    const registryUrl = `https://reactmint.com/r/${componentSlug}-${variant}.json`;
+    const registryUrl = `https://mintuix.com/r/${componentSlug}-${variant}.json`;
 
     switch (packageManager) {
       case "npm":
-        return `npx reactmint add ${registryUrl}`;
+        return `npx mintuix add ${registryUrl}`;
       case "pnpm":
-        return `pnpm dlx reactmint add ${registryUrl}`;
+        return `pnpm dlx mintuix add ${registryUrl}`;
       case "yarn":
-        return `yarn dlx reactmint add ${registryUrl}`;
+        return `yarn dlx mintuix add ${registryUrl}`;
       case "bun":
-        return `bunx reactmint add ${registryUrl}`;
+        return `bunx mintuix add ${registryUrl}`;
       default:
-        return `npx reactmint add ${registryUrl}`;
+        return `npx mintuix add ${registryUrl}`;
     }
   }
 

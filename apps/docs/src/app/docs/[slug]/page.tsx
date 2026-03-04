@@ -29,7 +29,7 @@ export default function ComponentPage({
   const [packageManager, setPackageManager] = useState<PackageManager>("pnpm");
   const [copied, setCopied] = useState("");
   const [codeLang, setCodeLang] = useState<"ts" | "js">("ts");
-  const [codeStyle, setCodeStyle] = useState<"tailwind" | "css">("tailwind");
+  const [codeStyle, setCodeStyle] = useState<"tailwind" | "css" | "variants">("tailwind");
   const [previewKey, setPreviewKey] = useState(0);
   const [isCodeExpanded, setIsCodeExpanded] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
@@ -159,7 +159,7 @@ export default function ComponentPage({
                  </h3>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                    {Object.entries(component.props).map(([key, propDef]) => (
-                     <div key={key} className="space-y-3">
+                     <div key={key} className={`space-y-3 ${propDef.type === "color" ? "md:col-span-2" : ""}`}>
                        <div className="flex justify-between items-center text-sm">
                          <span className="text-foreground font-medium flex items-center gap-2">
                            <span className="font-mono text-xs bg-foreground/5 px-1.5 py-0.5 rounded border border-foreground/10">{key}</span>
@@ -214,8 +214,71 @@ export default function ComponentPage({
                            <span className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${customProps[key] ? 'translate-x-5' : 'translate-x-1'}`} />
                          </button>
                        )}
+
+                       {propDef.type === "color" && (
+                         <div className="relative flex items-center bg-background border border-foreground/10 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-primary/20 transition-all p-1">
+                           <input 
+                             type="color" 
+                             value={customProps[key]} 
+                             onChange={(e) => handlePropChange(key, e.target.value)}
+                             className="w-10 h-10 p-0 border-0 rounded cursor-pointer shrink-0 bg-transparent flex-[0_0_auto] overflow-hidden"
+                             style={{
+                               WebkitAppearance: "none",
+                               padding: 0,
+                               border: "none",
+                             }}
+                           />
+                           <input 
+                             type="text"
+                             value={customProps[key]} 
+                             onChange={(e) => handlePropChange(key, e.target.value)}
+                             className="w-full bg-transparent border-0 px-3 py-2 text-sm font-mono text-foreground focus:outline-none focus:ring-0 uppercase placeholder-muted-foreground"
+                             placeholder="#000000"
+                           />
+                         </div>
+                       )}
                      </div>
                    ))}
+                 </div>
+              </div>
+            )}
+
+            {/* API Reference Table */}
+            {component.props && Object.keys(component.props).length > 0 && (
+              <div className="border border-foreground/10 rounded-2xl bg-background overflow-hidden">
+                 <div className="p-6 pb-4">
+                   <h3 className="text-sm font-bold flex items-center gap-2">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                     API Reference
+                   </h3>
+                 </div>
+                 <div className="overflow-x-auto">
+                   <table className="w-full text-sm">
+                     <thead>
+                       <tr className="border-t border-foreground/5 bg-foreground/[0.02]">
+                         <th className="text-left px-6 py-3 text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">Prop</th>
+                         <th className="text-left px-6 py-3 text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">Type</th>
+                         <th className="text-left px-6 py-3 text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">Default</th>
+                         <th className="text-left px-6 py-3 text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">Description</th>
+                       </tr>
+                     </thead>
+                     <tbody>
+                       {Object.entries(component.props).map(([key, propDef], i) => (
+                         <tr key={key} className={`border-t border-foreground/5 ${i % 2 === 0 ? '' : 'bg-foreground/[0.015]'}`}>
+                           <td className="px-6 py-3 font-mono text-xs font-semibold text-foreground">{key}</td>
+                           <td className="px-6 py-3">
+                             {propDef.type === "select" && propDef.options ? (
+                               <span className="font-mono text-xs text-purple-500 dark:text-purple-400">{propDef.options.map(o => `"${o}"`).join(" | ")}</span>
+                             ) : (
+                               <span className="font-mono text-xs text-blue-500 dark:text-blue-400">{propDef.type}</span>
+                             )}
+                           </td>
+                           <td className="px-6 py-3 font-mono text-xs text-muted-foreground">{typeof propDef.defaultValue === "boolean" ? String(propDef.defaultValue) : `"${propDef.defaultValue}"`}</td>
+                           <td className="px-6 py-3 text-xs text-muted-foreground">{propDef.description || "—"}</td>
+                         </tr>
+                       ))}
+                     </tbody>
+                   </table>
                  </div>
               </div>
             )}
@@ -304,7 +367,7 @@ export default function App() {
                  {installTab === "cli" && (
                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-foreground/10 text-foreground transition-colors text-xs font-medium bg-transparent cursor-default select-none">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="m19.01 11.55-7.46 7.46c-.46.46-.46 1.19 0 1.65a1.16 1.16 0 0 0 1.64 0l7.46-7.46c.46-.46.46-1.19 0-1.65s-1.19-.46-1.65 0ZM19.17 3.34c-.46-.46-1.19-.46-1.65 0L3.34 17.52c-.46.46-.46 1.19 0 1.65a1.16 1.16 0 0 0 1.64 0L19.16 4.99c.46-.46.46-1.19 0-1.65Z"/></svg>
-                      <span className="text-muted-foreground tracking-wide">reactmint</span>
+                      <span className="text-muted-foreground tracking-wide">mintuix</span>
                    </div>
                  )}
               </div>
@@ -333,14 +396,14 @@ export default function App() {
                       if (packageManager === "yarn") runner = "yarn dlx";
                       if (packageManager === "bun") runner = "bunx";
                       
-                      const baseCmd = `npx reactmint add ${component.slug}`;
+                      const baseCmd = `npx mintuix add ${component.slug}`;
                       installString = baseCmd.replace("npx", runner) + (framework !== "next" ? ` --${framework}` : "");
                     } else {
                       let installer = "npm install";
                       if (packageManager === "pnpm") installer = "pnpm add";
                       if (packageManager === "yarn") installer = "yarn add";
                       if (packageManager === "bun") installer = "bun install";
-                      installString = `${installer} ${component.install?.npm?.split('install ')[1] || `@reactmint/${component.slug}`}`;
+                      installString = `${installer} ${component.install?.npm?.split('install ')[1] || `@mintuix/${component.slug}`}`;
                     }
                   } else {
                     const variantKey: VariantKey = `${codeLang}-${codeStyle}` as VariantKey;
@@ -509,10 +572,10 @@ export default function App() {
             >
               {codeStyle === "tailwind" ? (
                 <svg fill="currentColor" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="text-zinc-100"><path fillRule="evenodd" clipRule="evenodd" d="M12 6.036c-2.667 0-4.333 1.325-5 3.976 1-1.325 2.167-1.822 3.5-1.491.761.189 1.305.738 1.906 1.345C13.387 10.855 14.522 12 17 12c2.667 0 4.333-1.325 5-3.976-1 1.325-2.166 1.822-3.5 1.491-.761-.189-1.305-.738-1.907-1.345-.98-.99-2.114-2.134-4.593-2.134zM7 12c-2.667 0-4.333 1.325-5 3.976 1-1.326 2.167-1.822 3.5-1.491.761.189 1.305.738 1.907 1.345.98.989 2.115 2.134 4.594 2.134 2.667 0 4.333-1.325 5-3.976-1 1.325-2.167 1.822-3.5 1.491-.761-.189-1.305-.738-1.906-1.345C10.613 13.145 9.478 12 7 12z"></path></svg>
-              ) : (
-                <span className="font-bold text-[11px] text-zinc-100">CSS</span>
-              )}
-              <span className="text-sm font-medium text-zinc-300">{codeStyle === 'tailwind' ? 'Tailwind' : 'CSS'}</span>
+              ) : codeStyle === "variants" ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-100"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+              ) : null}
+              <span className="text-sm font-medium text-zinc-300">{codeStyle === 'tailwind' ? 'Tailwind' : 'Variants'}</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`text-zinc-500 transition-transform ${isStyleDropdownOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>
             </button>
             
@@ -521,20 +584,20 @@ export default function App() {
                 <div className="fixed inset-0 z-40" onClick={() => setIsStyleDropdownOpen(false)}></div>
                 <div className="absolute top-full left-0 mt-2 w-max min-w-[140px] bg-[#0d0d0d] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 flex flex-col p-1.5">
                   <button 
-                    onClick={() => { setCodeStyle('css'); setIsStyleDropdownOpen(false); }}
-                    className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors group ${codeStyle === 'css' ? 'bg-white/10 text-white' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
-                  >
-                    <span className="font-bold text-[11px] mr-2 text-zinc-100">CSS</span>
-                    <span className="font-medium">CSS</span>
-                    {codeStyle === 'css' && <div className="ml-auto w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>}
-                  </button>
-                  <button 
                     onClick={() => { setCodeStyle('tailwind'); setIsStyleDropdownOpen(false); }}
-                    className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors group mt-0.5 ${codeStyle === 'tailwind' ? 'bg-white/10 text-white' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
+                    className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors group ${codeStyle === 'tailwind' ? 'bg-white/10 text-white' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
                   >
                     <svg className="mr-2 text-zinc-100" fill="currentColor" width="14" height="14" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M12 6.036c-2.667 0-4.333 1.325-5 3.976 1-1.325 2.167-1.822 3.5-1.491.761.189 1.305.738 1.906 1.345C13.387 10.855 14.522 12 17 12c2.667 0 4.333-1.325 5-3.976-1 1.325-2.166 1.822-3.5 1.491-.761-.189-1.305-.738-1.907-1.345-.98-.99-2.114-2.134-4.593-2.134zM7 12c-2.667 0-4.333 1.325-5 3.976 1-1.326 2.167-1.822 3.5-1.491.761.189 1.305.738 1.907 1.345.98.989 2.115 2.134 4.594 2.134 2.667 0 4.333-1.325 5-3.976-1 1.325-2.167 1.822-3.5 1.491-.761-.189-1.305-.738-1.906-1.345C10.613 13.145 9.478 12 7 12z"></path></svg>
                     <span className="font-medium">Tailwind</span>
                     {codeStyle === 'tailwind' && <div className="ml-auto w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.5)]"></div>}
+                  </button>
+                  <button 
+                    onClick={() => { setCodeStyle('variants'); setIsStyleDropdownOpen(false); }}
+                    className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors group mt-0.5 ${codeStyle === 'variants' ? 'bg-white/10 text-white' : 'text-zinc-400 hover:text-white hover:bg-white/5'}`}
+                  >
+                    <svg className="mr-2 text-zinc-100" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                    <span className="font-medium">Variants</span>
+                    {codeStyle === 'variants' && <div className="ml-auto w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_8px_rgba(251,146,60,0.5)]"></div>}
                   </button>
                 </div>
               </>
@@ -546,7 +609,9 @@ export default function App() {
           
           {/* Copy Button */}
           {(() => {
-            const activeCode = codeStyle === "tailwind" ? component.code[codeLang] : component.code.css;
+            const activeCode = codeStyle === "variants" 
+              ? (component.usage?.[codeLang] || component.code[codeLang])
+              : component.code[codeLang] || component.code.ts;
             return (
               <button 
                 onClick={() => handleCopy(activeCode, 'code')}
@@ -566,8 +631,10 @@ export default function App() {
           <div className={`relative ${!isCodeExpanded ? "max-h-[400px] overflow-hidden" : ""}`}>
             <div className="p-4 sm:p-6 text-zinc-300 overflow-x-auto text-[13px] font-mono leading-relaxed scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
                <CodeHighlighter 
-                 code={codeStyle === "tailwind" ? component.code[codeLang] : component.code.css} 
-                 lang={codeStyle === "css" ? "css" : codeLang} 
+                 code={codeStyle === "variants" 
+                   ? (component.usage?.[codeLang] || component.code[codeLang])
+                   : component.code[codeLang] || component.code.ts} 
+                 lang={codeLang} 
                />
             </div>
             {!isCodeExpanded && (

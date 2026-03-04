@@ -68,7 +68,7 @@ export const splitTextComponent: ComponentMetadata = {
 
   install: {
     jsrepo: "npx jsrepo add split-text",
-    npm: "npm install @reactmint/split-text",
+    npm: "npm install @mintuix/split-text",
   },
 
   code: {
@@ -154,7 +154,7 @@ export const SplitText = React.forwardRef<HTMLElement, SplitTextProps>(
       () => {
         if (!isMounted || !internalRef.current) return;
 
-        const elements = gsap.utils.toArray<HTMLElement>('.reactmint-split-segment', internalRef.current);
+        const elements = gsap.utils.toArray<HTMLElement>('.mintuix-split-segment', internalRef.current);
         if (elements.length === 0) return;
 
         gsap.fromTo(
@@ -201,7 +201,7 @@ export const SplitText = React.forwardRef<HTMLElement, SplitTextProps>(
 
             return (
               <React.Fragment key={index}>
-                <span className={\`reactmint-split-segment inline-block will-change-transform \${splitClassName}\`}>
+                <span className={\`mintuix-split-segment inline-block will-change-transform \${splitClassName}\`}>
                   {content}
                 </span>
                 {suffixSpace && <span className="inline-block">{suffixSpace}</span>}
@@ -262,7 +262,7 @@ export const SplitText = React.forwardRef(
       () => {
         if (!isMounted || !internalRef.current) return;
 
-        const elements = gsap.utils.toArray('.reactmint-split-segment', internalRef.current);
+        const elements = gsap.utils.toArray('.mintuix-split-segment', internalRef.current);
         if (elements.length === 0) return;
 
         gsap.fromTo(
@@ -305,7 +305,7 @@ export const SplitText = React.forwardRef(
 
             return (
               <React.Fragment key={index}>
-                <span className={\`reactmint-split-segment inline-block will-change-transform \${splitClassName}\`}>
+                <span className={\`mintuix-split-segment inline-block will-change-transform \${splitClassName}\`}>
                   {content}
                 </span>
                 {suffixSpace && <span className="inline-block">{suffixSpace}</span>}
@@ -320,7 +320,7 @@ export const SplitText = React.forwardRef(
 
 SplitText.displayName = 'SplitText';`,
     tailwind: ``,
-    css: `.reactmint-split-segment {
+    css: `.mintuix-split-segment {
   display: inline-block;
   will-change: transform, opacity;
 }
@@ -368,7 +368,7 @@ export default function App() {
 
       {/* 3. Fully tailored callback chain */}
       <SplitText 
-        text="ReactMint Animations" 
+        text="Mintuix Animations" 
         delay={0.5}
         stagger={0.02}
         duration={2}
@@ -404,7 +404,7 @@ export default function App() {
       />
 
       <SplitText 
-        text="ReactMint Animations" 
+        text="Mintuix Animations" 
         delay={0.5}
         stagger={0.02}
         duration={2}

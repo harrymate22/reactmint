@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,41 +16,41 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | ReactMint",
-    default: "ReactMint - Build Stunning UIs with Precision",
+    template: "%s | Mintuix",
+    default: "Mintuix - Build Stunning UIs with Precision",
   },
   description:
     "The modern React component library for Next.js. Production-ready, beautiful animations, and highly customizable to match your brand.",
   keywords: ["React", "Tailwind CSS", "Next.js", "UI Library", "Components", "GSAP"],
   authors: [
     {
-      name: "ReactMint",
-      url: "https://reactmint.com",
+      name: "Mintuix",
+      url: "https://mintuix.com",
     },
   ],
-  creator: "ReactMint",
+  creator: "Mintuix",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://reactmint.com",
-    title: "ReactMint - Modern UI Components",
+    url: "https://mintuix.com",
+    title: "Mintuix - Modern UI Components",
     description: "Production-ready, beautiful animations, and highly customizable UI library.",
-    siteName: "ReactMint",
+    siteName: "Mintuix",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "ReactMint - Build Stunning UIs",
+        alt: "Mintuix - Build Stunning UIs",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ReactMint - Modern UI Components",
+    title: "Mintuix - Modern UI Components",
     description: "Production-ready, beautiful animations, and highly customizable UI library.",
     images: ["/og-image.png"],
-    creator: "@reactmint",
+    creator: "@mintuix",
   },
 };
 

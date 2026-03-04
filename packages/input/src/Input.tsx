@@ -1,3 +1,5 @@
+"use client";
+
 import React, { forwardRef, useState, useId } from "react";
 import { iosStyles } from "./variants/ios";
 import { androidStyles } from "./variants/android";
@@ -14,6 +16,7 @@ export interface InputProps
   floatingLabel?: boolean;
   error?: string;
   wrapperClassName?: string;
+  focusColor?: string;
 }
 
 const defaultStyles: Record<string, string> = {
@@ -50,6 +53,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       error,
       className = "",
       wrapperClassName = "",
+      focusColor,
       placeholder,
       value,
       defaultValue,
@@ -107,8 +111,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       .filter(Boolean)
       .join(" ");
 
+    const dynamicStyles = {
+      ...(focusColor ? { "--input-focus-color": focusColor } : {}),
+      ...(props.style || {}),
+    } as React.CSSProperties;
+
     return (
-      <div className={`${styles.wrapper} ${wrapperClassName}`}>
+      <div className={`${styles.wrapper} ${wrapperClassName}`} style={dynamicStyles}>
         {label && !floatingLabel && (
           <label htmlFor={inputId} className={styles.label}>
             {label}
@@ -154,4 +163,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   }
 );
 
-Input.displayName = "ReactMintInput";
+Input.displayName = "MintuixInput";

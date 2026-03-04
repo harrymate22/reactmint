@@ -19,13 +19,13 @@ export default function MarketingPage() {
              <div className="h-6 w-6 rounded-md bg-foreground flex items-center justify-center shadow-[0_0_10px_rgba(255,65,3,0.2)] dark:shadow-[0_0_10px_rgba(255,65,3,0.5)]">
                <span className="text-background font-extrabold text-[10px]">RM</span>
              </div>
-             <span className="font-bold tracking-tight text-foreground/90 text-sm hidden lg:block">ReactMint</span>
+             <span className="font-bold tracking-tight text-foreground/90 text-sm hidden lg:block">Mintuix</span>
            </Link>
            
            {/* Promo Pill */}
            <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-semibold tracking-wide">
               <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>
-              <span>ReactMint Pro is here - <span className="opacity-80">100+ UI blocks</span></span>
+              <span>Mintuix Pro is here - <span className="opacity-80">100+ UI blocks</span></span>
            </div>
         </div>
         
@@ -178,7 +178,7 @@ export default function MarketingPage() {
       <footer className="w-full py-8 border-t border-foreground/5 flex flex-col md:flex-row items-center justify-between px-6 max-w-6xl mx-auto text-xs text-muted-foreground font-medium">
          <div className="flex items-center gap-2 mb-4 md:mb-0">
            <div className="w-4 h-4 rounded bg-foreground/10 flex items-center justify-center text-foreground"><span className="text-[8px] font-bold">RM</span></div>
-           ReactMint © 2026
+           Mintuix © 2026
          </div>
          <div className="flex gap-6">
            <Link href="/" className="hover:text-foreground transition-colors">Twitter</Link>

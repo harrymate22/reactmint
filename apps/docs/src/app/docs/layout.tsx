@@ -16,7 +16,7 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
               <div className="h-6 w-6 rounded-md bg-foreground flex items-center justify-center shadow-[0_0_10px_rgba(255,65,3,0.3)]">
                 <span className="text-background font-extrabold text-[10px]">RM</span>
               </div>
-              <span className="font-bold tracking-tight text-foreground/90 text-sm hidden md:block">ReactMint</span>
+              <span className="font-bold tracking-tight text-foreground/90 text-sm hidden md:block">Mintuix</span>
             </Link>
           </div>
 
@@ -73,6 +73,19 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
 
+          {/* Form Elements */}
+          <div className="mb-8 pl-1">
+            <h4 className="mb-3 px-1 text-sm font-medium text-foreground">Form Elements</h4>
+            <div className="grid grid-flow-row auto-rows-max text-sm space-y-1 border-l border-foreground/10 ml-1">
+              <Link 
+                href="/docs/input" 
+                className="flex w-full items-center border-l-2 border-transparent px-3 py-1.5 text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors -ml-[1px]"
+              >
+                Input
+              </Link>
+            </div>
+          </div>
+
           {/* Text Animations */}
           <div className="mb-8 pl-1">
             <h4 className="mb-3 px-1 text-sm font-medium text-foreground">Text Animations</h4>
@@ -120,7 +133,7 @@ export default function DocsLayout({ children }: { children: ReactNode }) {
             
             <div className="flex items-center gap-2 mb-2 relative z-10">
               <Rocket className="w-5 h-5 text-primary" />
-              <h3 className="font-bold tracking-tight text-foreground text-sm">Get ReactMint Pro</h3>
+              <h3 className="font-bold tracking-tight text-foreground text-sm">Get Mintuix Pro</h3>
             </div>
             <p className="text-xs text-muted-foreground mb-4 relative z-10 font-medium">
               65+ components, 100+ blocks & 5 templates to ship memorable products faster.

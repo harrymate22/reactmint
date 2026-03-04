@@ -82,7 +82,7 @@ export const SplitText = React.forwardRef<HTMLElement, SplitTextProps>(
       () => {
         if (!isMounted || !internalRef.current) return;
 
-        const elements = gsap.utils.toArray<HTMLElement>('.reactmint-split-segment', internalRef.current);
+        const elements = gsap.utils.toArray<HTMLElement>('.mintuix-split-segment', internalRef.current);
         if (elements.length === 0) return;
 
         gsap.fromTo(
@@ -129,7 +129,7 @@ export const SplitText = React.forwardRef<HTMLElement, SplitTextProps>(
 
             return (
               <React.Fragment key={index}>
-                <span className={`reactmint-split-segment inline-block will-change-transform ${splitClassName}`}>
+                <span className={`mintuix-split-segment inline-block will-change-transform ${splitClassName}`}>
                   {content}
                 </span>
                 {suffixSpace && <span className="inline-block">{suffixSpace}</span>}

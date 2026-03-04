@@ -7,7 +7,7 @@ export default function DocsIndex() {
         </h1>
         <div className="text-muted-foreground text-base md:text-lg leading-relaxed space-y-6">
           <p>
-            ReactMint is an open-source collection of carefully designed UI components that aim to enhance your React web applications.
+            Mintuix is an open-source collection of carefully designed UI components that aim to enhance your React web applications.
           </p>
           <p>
             This is not your typical component library, which means you won't find a set of generic buttons, inputs, or other common UI elements here.
@@ -24,7 +24,7 @@ export default function DocsIndex() {
         </h2>
         <div className="text-muted-foreground text-base md:text-lg leading-relaxed space-y-6">
           <p>
-            The goal of ReactMint is simple - provide flexible, visually stunning and most importantly, free components that take web projects to the next level.
+            The goal of Mintuix is simple - provide flexible, visually stunning and most importantly, free components that take web projects to the next level.
           </p>
           <p>
             To make that happen, the project is committed to the following principles:
@@ -46,7 +46,7 @@ export default function DocsIndex() {
              <li className="flex items-start gap-3">
                <span className="h-2 w-2 rounded-full bg-primary mt-2 shrink-0"></span>
                <div>
-                  <strong className="text-foreground font-semibold">Fully Modular:</strong> Install strictly what you need, ReactMint is not a dependency nightmare.
+                  <strong className="text-foreground font-semibold">Fully Modular:</strong> Install strictly what you need, Mintuix is not a dependency nightmare.
                </div>
              </li>
           </ul>
